@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">TRADING APP</string>
+
+    <!-- Dummy Values INR, XRP and Other Coins -->
+    <string name="staticAmt">0.00</string>
+    <string name="dummyval">--</string>
+    <string name="staticCoins">0.00000000</string>
+    <string name="staticCoinsXRP">0.000000</string>
+    <string name="staticCoinsXLM">0.0000000</string>
+    <string name="staticFreezedCoins">0.0000</string>
+    <string name="static0">0</string>
+    <string name="RswithPlus">\u20B9</string>
+</resources>
