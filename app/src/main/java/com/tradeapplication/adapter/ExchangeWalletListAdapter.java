@@ -56,7 +56,7 @@ public class ExchangeWalletListAdapter extends RecyclerView.Adapter<ExchangeWall
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MoreRowView holder, int position) {
+    public void onBindViewHolder(@NonNull MoreRowView holder, int position) {
         final WalletCoinModel more = moreList.get(position);
 
         holder.title.setText(more.getSymbol());

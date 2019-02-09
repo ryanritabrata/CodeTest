@@ -3,6 +3,7 @@ package com.tradeapplication;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -18,6 +19,7 @@ import com.tradeapplication.database.SqliteHelper;
 import com.tradeapplication.responses.Order;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DetailPage extends AppCompatActivity implements View.OnClickListener {
     TextView buyLyt, sellLyt, avblBal;
@@ -41,8 +43,13 @@ public class DetailPage extends AppCompatActivity implements View.OnClickListene
 
         db = new SqliteHelper(this);
         recycler_view_orders = findViewById(R.id.recycler_view_orders);
+        arrayList = db.getOrders();
         adapter = new OrderListAdapter(arrayList, DetailPage.this);
-        recycler_view_orders.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        RecyclerView.LayoutManager mLayoutManagerAsks = new LinearLayoutManager(this);
+        recycler_view_orders.setLayoutManager(mLayoutManagerAsks);
+        recycler_view_orders.setItemAnimator(new DefaultItemAnimator());
+        recycler_view_orders.setNestedScrollingEnabled(false);
+        recycler_view_orders.setAdapter(adapter);
 
         buyLyt = findViewById(R.id.buyLyt);
         sellLyt = findViewById(R.id.sellLyt);
@@ -69,12 +76,12 @@ public class DetailPage extends AppCompatActivity implements View.OnClickListene
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(qty.getText().toString().trim().length() == 0){
+                if (qty.getText().toString().trim().length() == 0) {
                     Toast.makeText(getApplicationContext(), "Please enter Qty", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                if(rate.getText().toString().trim().length() == 0){
+                if (rate.getText().toString().trim().length() == 0) {
                     Toast.makeText(getApplicationContext(), "Please enter Rate", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -83,15 +90,11 @@ public class DetailPage extends AppCompatActivity implements View.OnClickListene
                 qty.setText("");
                 rate.setText("");
                 arrayList.clear();
-                arrayList = db.getOrders();
-                System.out.println(arrayList.size());
+                arrayList.addAll(db.getOrders());
                 adapter.notifyDataSetChanged();
             }
         });
 
-        arrayList.clear();
-        arrayList = db.getOrders();
-        adapter.notifyDataSetChanged();
     }
 
 
@@ -122,6 +125,7 @@ public class DetailPage extends AppCompatActivity implements View.OnClickListene
             buyLyt.setBackground(getResources().getDrawable(R.drawable.red_bg));
             sellLyt.setBackground(getResources().getDrawable(R.drawable.white_bg));
             avblBal.setText(Html.fromHtml("Avbl: " + getResources().getString(R.string.RswithPlus) + "10,000.00"));
+            btnOrder.setText("BUY");
             type = "buy";
         } else if (v.getId() == R.id.sellLyt) {
             sellLyt.setTextColor(Color.WHITE);
@@ -130,6 +134,11 @@ public class DetailPage extends AppCompatActivity implements View.OnClickListene
             sellLyt.setBackground(getResources().getDrawable(R.drawable.red_bg));
             avblBal.setText(Html.fromHtml("Avbl:" + "1.00000000 " + getIntent().getStringExtra("symbol")));
             type = "sell";
+            btnOrder.setText("SELL");
         }
+    }
+
+    public String returnSymbol(){
+        return getIntent().getStringExtra("symbol");
     }
 }
